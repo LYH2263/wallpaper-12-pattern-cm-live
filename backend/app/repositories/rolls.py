@@ -16,3 +16,16 @@ def get_roll(rid: int):
         return dict(row) if row else None
     finally:
         conn.close()
+
+
+def update_pattern_cm(rid: int, pattern_cm: float):
+    conn = connect()
+    try:
+        cur = conn.execute("UPDATE rolls SET pattern_cm=? WHERE id=?", (pattern_cm, rid))
+        conn.commit()
+        if cur.rowcount == 0:
+            return None
+        row = conn.execute("SELECT * FROM rolls WHERE id=?", (rid,)).fetchone()
+        return dict(row) if row else None
+    finally:
+        conn.close()

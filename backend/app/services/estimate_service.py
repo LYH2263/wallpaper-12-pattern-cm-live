@@ -19,5 +19,10 @@ def run_estimate(wall_id: int, roll_id: int, save: bool, note: str):
     )
     run_id = None
     if save:
-        run_id = history.insert_run(wall_id, roll_id, {**calc, "wall_id": wall_id, "roll_id": roll_id}, note)
+        run_id = history.insert_run(
+            wall_id,
+            roll_id,
+            {**calc, "pattern_cm": roll["pattern_cm"], "wall_id": wall_id, "roll_id": roll_id},
+            note,
+        )
     return {"wall": wall, "roll": roll, "run_id": run_id, **calc}

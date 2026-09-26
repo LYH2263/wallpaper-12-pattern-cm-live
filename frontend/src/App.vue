@@ -8,7 +8,7 @@
         <router-link to="/rolls">纸卷</router-link>
         <router-link to="/drops">裁条预览</router-link>
         <router-link to="/bench">算卷</router-link>
-        <router-link to="/pattern">对花说明</router-link>
+        <router-link to="/pattern">花匹配</router-link>
         <router-link to="/history">记录</router-link>
         <router-link to="/settings">设置</router-link>
       </nav>

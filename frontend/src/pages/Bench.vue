@@ -18,7 +18,7 @@ async function run(save) {
   <select v-model.number="wallId"><option v-for="w in walls" :key="w.id" :value="w.id">{{ w.name }}</option></select>
   <select v-model.number="rollId"><option v-for="r in rolls" :key="r.id" :value="r.id">{{ r.name }}</option></select>
   <button @click="run(false)">试算</button><button @click="run(true)">保存</button>
-  <div v-if="out"><strong>{{ out.rolls }} 卷</strong> · {{ out.drops }} 条 · 每条 {{ out.drop_len_m }}m
+  <div v-if="out"><strong>{{ out.rolls }} 卷</strong> · {{ out.drops }} 条 · 每条 {{ out.drop_len_m }}m · 每卷可裁 {{ out.strips_per_roll }} 条 · 花高 {{ out.roll.pattern_cm }}cm
   <DropStripBar :drops="out.drops" :drop-len="out.drop_len_m" :rolls="out.rolls" /></div>
   </div>
 </template>

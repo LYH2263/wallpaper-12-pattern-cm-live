@@ -1,5 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from app.repositories import rolls as repo
+from app.schemas.roll import RollPatternUpdate
+from app.services import roll_service
 
 router = APIRouter()
 
@@ -15,3 +17,8 @@ def get_roll(roll_id: int):
     if not row:
         raise HTTPException(404)
     return row
+
+
+@router.patch("/rolls/{roll_id}")
+def update_roll_pattern(roll_id: int, body: RollPatternUpdate):
+    return roll_service.update_pattern(roll_id, body.pattern_cm)
