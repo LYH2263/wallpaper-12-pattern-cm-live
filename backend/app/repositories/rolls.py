@@ -1,4 +1,4 @@
-from app.db import connect
+from app.db import connect, get_conn
 
 
 def list_rolls():
@@ -16,3 +16,9 @@ def get_roll(rid: int):
         return dict(row) if row else None
     finally:
         conn.close()
+
+
+def update_pattern_cm(rid: int, pattern_cm: float) -> int:
+    with get_conn() as conn:
+        cur = conn.execute("UPDATE rolls SET pattern_cm=? WHERE id=?", (pattern_cm, rid))
+        return cur.rowcount

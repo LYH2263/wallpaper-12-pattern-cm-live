@@ -17,24 +17,37 @@ def insert_run(wall_id: int, roll_id: int, result: dict, note: str = "") -> int:
         conn.close()
 
 
+def _row_to_run(row):
+    d = dict(row)
+    d["result"] = json.loads(d.pop("result_json"))
+    return d
+
+
+_RUN_SELECT = """
+    SELECT r.*, w.name wall_name, rl.name roll_name
+    FROM calc_runs r
+    LEFT JOIN walls w ON w.id=r.wall_id
+    LEFT JOIN rolls rl ON rl.id=r.roll_id
+"""
+
+
+def get_run(run_id: int):
+    """Read one archived run by id. Only the frozen snapshot is deserialized — never recomputed."""
+    conn = connect()
+    try:
+        row = conn.execute(_RUN_SELECT + " WHERE r.id=?", (run_id,)).fetchone()
+        return _row_to_run(row) if row else None
+    finally:
+        conn.close()
+
+
 def list_runs(limit: int = 50):
     conn = connect()
     try:
         rows = conn.execute(
-            """
-            SELECT r.*, w.name wall_name, rl.name roll_name
-            FROM calc_runs r
-            LEFT JOIN walls w ON w.id=r.wall_id
-            LEFT JOIN rolls rl ON rl.id=r.roll_id
-            ORDER BY r.id DESC LIMIT ?
-            """,
+            _RUN_SELECT + " ORDER BY r.id DESC LIMIT ?",
             (limit,),
         ).fetchall()
-        out = []
-        for row in rows:
-            d = dict(row)
-            d["result"] = json.loads(d.pop("result_json"))
-            out.append(d)
-        return out
+        return [_row_to_run(row) for row in rows]
     finally:
         conn.close()

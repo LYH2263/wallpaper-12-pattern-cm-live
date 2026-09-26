@@ -1,6 +1,7 @@
 """Wallpaper rolls: perimeter strips, pattern repeat on drop length, strips per roll."""
 
 from app.engines.helpers import ceil_units, floor_units
+from app.engines.pattern import validate_pattern_cm
 
 
 def roll_count(
@@ -13,7 +14,7 @@ def roll_count(
     if roll_width <= 0 or roll_length <= 0:
         raise ValueError("invalid roll size")
     drops = ceil_units(float(perimeter) / float(roll_width))
-    pattern_m = max(0.0, float(pattern_cm) / 100.0)
+    pattern_m = validate_pattern_cm(pattern_cm) / 100.0
     drop_len = float(height) + pattern_m
     if drop_len <= 0:
         raise ValueError("invalid drop length")
